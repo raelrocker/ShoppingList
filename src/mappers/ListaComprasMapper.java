@@ -2,29 +2,32 @@ package mappers;
 
 import java.util.ArrayList;
 
-import bancoDeDados.BancoDeDados;
+import bancoDeDados.IBancoDeDados;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import entities.IListaCompras;
 import entities.ListaCompras;
 
-public class ListaComprasMapper {
+public class ListaComprasMapper implements IListaComprasMapper {
 	
 	private SQLiteDatabase banco;
+	private String nomeTabela = "lista_compras";
 	
 	public ListaComprasMapper(SQLiteDatabase banco) {
 		this.banco = banco;
 	}
 	
-	public Boolean save(ListaCompras listaCompras) {
+	@Override
+	public Boolean save(IListaCompras listaCompras) {
 		
 		ContentValues contentValues = new ContentValues();
 		contentValues.put("nome", listaCompras.getNome());
 		contentValues.put("data_criacao", listaCompras.getDataCriacao());
 		contentValues.put("data_modificacao", listaCompras.getDataModificacao());
 		
-		int id = (int)this.banco.insert(BancoDeDados.TABLE_LISTA_COMPRAS, null, contentValues);
+		int id = (int)this.banco.insert(this.nomeTabela, null, contentValues);
 		if (id > 0) {
 			listaCompras.setId(id);
 			return true;
@@ -34,21 +37,24 @@ public class ListaComprasMapper {
 			
 	}
 	
-	public Boolean update(ListaCompras listaCompras) {
+	@Override
+	public Boolean update(IListaCompras listaCompras) {
 		ContentValues contentValues = new ContentValues();
 		contentValues.put("nome", listaCompras.getNome());
 		contentValues.put("data_criacao", listaCompras.getDataCriacao());
 		contentValues.put("data_modificacao", listaCompras.getDataModificacao());
-		return this.banco.update(BancoDeDados.TABLE_LISTA_COMPRAS, contentValues, "id = ?", new String[]{String.valueOf(listaCompras.getId())}) > 0;
+		return this.banco.update(this.nomeTabela, contentValues, "id = ?", new String[]{String.valueOf(listaCompras.getId())}) > 0;
 	}
 	
+	@Override
 	public Boolean delete(int id) {
-		return this.banco.delete(BancoDeDados.TABLE_LISTA_COMPRAS, "id = ?", new String[]{String.valueOf(id)}) > 0;
+		return this.banco.delete(this.nomeTabela, "id = ?", new String[]{String.valueOf(id)}) > 0;
 	}
 	
-	public ListaCompras find(int id) {
-		ListaCompras lista = null;
-		Cursor cursor = banco.query(BancoDeDados.TABLE_LISTA_COMPRAS,
+	@Override
+	public IListaCompras find(int id) {
+		IListaCompras lista = null;
+		Cursor cursor = banco.query(this.nomeTabela,
                 new String[]{"id", "nome", "data_criacao", "data_modificacao"},
                 "id = ?",
                 new String[]{ String.valueOf(id) },
@@ -66,9 +72,10 @@ public class ListaComprasMapper {
 		
 	}
 	
-	public ArrayList<ListaCompras> findAll() {
-		ArrayList<ListaCompras> listas = new ArrayList<ListaCompras>();
-		Cursor cursor = banco.query(BancoDeDados.TABLE_LISTA_COMPRAS,
+	@Override
+	public ArrayList<IListaCompras> findAll() {
+		ArrayList<IListaCompras> listas = new ArrayList<IListaCompras>();
+		Cursor cursor = banco.query(this.nomeTabela,
 					                new String[]{"id", "nome", "data_criacao", "data_modificacao"},
 					                null,
 					                null,
