@@ -1,11 +1,14 @@
 package entities;
 
+import java.util.ArrayList;
+
 
 public class ListaCompras implements IListaCompras {
 	private int id;
 	private String nome;
 	private String dataCriacao;
 	private String dataModificacao;
+	private ArrayList<IProduto> produtos;
 	
 	@Override
 	public void setDataCriacao(String dataCriacao) {
@@ -59,6 +62,26 @@ public class ListaCompras implements IListaCompras {
 		this.nome = nome;
 		this.dataCriacao = dataCriacao;
 		this.dataModificacao = dataModificacao;
+	}
+
+	@Override
+	public ArrayList<IProduto> getProdutos() {
+		return this.produtos;
+	}
+
+	@Override
+	public void setProdutos(ArrayList<IProduto> produtos) {
+		this.produtos = produtos;		
+	}
+
+	@Override
+	public void addProduto(IProduto produto) {
+		this.produtos.add(produto);		
+	}
+
+	@Override
+	public void removeProduto(IProduto produto) {
+		this.produtos.remove(produto);
 	}
 	
 	
