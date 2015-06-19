@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import controllers.ListaComprasController;
+import controllers.ProdutoController;
 import dependencyManager.DependencyManager;
 import entities.IListaCompras;
+import entities.IProduto;
 import entities.ListaCompras;
+import entities.Produto;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,16 +25,17 @@ public class MainActivity extends Activity {
 		Boolean r = false;
 		setContentView(R.layout.activity_main);
 		SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		ListaComprasController l = DependencyManager.GetListaComprasController(this);
-		ListaCompras lista = new ListaCompras(0, "LISTA 3", sdf.format(new Date()), sdf.format(new Date()));
-		r = l.saveListaCompras(lista);
-		lista.setNome("LISTA 3 MODIFICADA");
-		r = l.updateListaCompras(lista);
-		//r = l.deleteListaCompras(lista.getId());
-		ArrayList<IListaCompras> listas = l.findAllListaCompras();
+		ProdutoController l = DependencyManager.GetProdutoController(this);
 		
-		for (IListaCompras lc : listas) {
-			Log.i("LISTA", lc.getId() + " " + lc.getNome() + " " + lc.getDataCriacao() + " " + lc.getDataModificacao());
+		Produto lista = new Produto(0, "PRODUTO 2", 10.25, sdf.format(new Date()), sdf.format(new Date()));
+		r = l.saveProduto(lista);
+		lista.setNome("PRODUTO 2 MODIFICADO");
+		r = l.updateProduto(lista);
+		r = l.deleteProduto(lista.getId());
+		ArrayList<IProduto> listas = l.findAllProdutos();
+		
+		for (IProduto lc : listas) {
+			Log.i("PRODUTO", lc.getId() + " " + lc.getNome() + " " + lc.getPreco() + lc.getDataCriacao() + " " + lc.getDataModificacao());
 		}
 		
 	}

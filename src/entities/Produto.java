@@ -1,9 +1,9 @@
 package entities;
 
-
-public class ListaCompras implements IListaCompras {
+public class Produto implements IProduto {
 	private int id;
 	private String nome;
+	private Double preco;
 	private String dataCriacao;
 	private String dataModificacao;
 	
@@ -28,6 +28,11 @@ public class ListaCompras implements IListaCompras {
 	}
 	
 	@Override
+	public void setPreco(Double preco) {
+		this.preco = preco;
+	}
+	
+	@Override
 	public String getDataCriacao() {
 		return dataCriacao;
 	}
@@ -47,20 +52,26 @@ public class ListaCompras implements IListaCompras {
 		return nome;
 	}
 	
-	public ListaCompras() {
+	@Override
+	public Double getPreco() {
+		return preco;
+	}
+	
+	public Produto() {
 		this.id = 0;
 		this.nome = "";
+		this.preco = 0.00;
 		this.dataCriacao = "";
 		this.dataModificacao = "";
 	}
 	
-	public ListaCompras(int id, String nome, String dataCriacao, String dataModificacao) {
+	public Produto(int id, String nome, Double preco, String dataCriacao, String dataModificacao) {
 		this.id = id;
 		this.nome = nome;
+		this.preco = preco;
 		this.dataCriacao = dataCriacao;
 		this.dataModificacao = dataModificacao;
 	}
-	
 	
 	
 	

@@ -2,7 +2,6 @@ package mappers;
 
 import java.util.ArrayList;
 
-import bancoDeDados.IBancoDeDados;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
