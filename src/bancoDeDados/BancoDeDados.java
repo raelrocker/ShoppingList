@@ -20,6 +20,11 @@ public class BancoDeDados implements IBancoDeDados {
 			BancoDeDados.banco = this.SetBancoDeDados(context);
 		}		
 		return BancoDeDados.banco;
+	}
+	
+	@Override
+	public SQLiteDatabase getBancoDeDados() {		
+		return BancoDeDados.banco;
 	}	
 	
 	private SQLiteDatabase SetBancoDeDados(Context context) {

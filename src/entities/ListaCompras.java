@@ -8,7 +8,7 @@ public class ListaCompras implements IListaCompras {
 	private String nome;
 	private String dataCriacao;
 	private String dataModificacao;
-	private ArrayList<IProduto> produtos;
+	private ArrayList<IListaComprasProduto> produtos;
 	
 	@Override
 	public void setDataCriacao(String dataCriacao) {
@@ -55,6 +55,7 @@ public class ListaCompras implements IListaCompras {
 		this.nome = "";
 		this.dataCriacao = "";
 		this.dataModificacao = "";
+		this.produtos = new ArrayList<IListaComprasProduto>();
 	}
 	
 	public ListaCompras(int id, String nome, String dataCriacao, String dataModificacao) {
@@ -62,25 +63,26 @@ public class ListaCompras implements IListaCompras {
 		this.nome = nome;
 		this.dataCriacao = dataCriacao;
 		this.dataModificacao = dataModificacao;
+		this.produtos = new ArrayList<IListaComprasProduto>();
 	}
 
 	@Override
-	public ArrayList<IProduto> getProdutos() {
+	public ArrayList<IListaComprasProduto> getProdutos() {
 		return this.produtos;
 	}
 
 	@Override
-	public void setProdutos(ArrayList<IProduto> produtos) {
+	public void setProdutos(ArrayList<IListaComprasProduto> produtos) {
 		this.produtos = produtos;		
 	}
 
 	@Override
-	public void addProduto(IProduto produto) {
+	public void addProduto(IListaComprasProduto produto) {
 		this.produtos.add(produto);		
 	}
 
 	@Override
-	public void removeProduto(IProduto produto) {
+	public void removeProduto(IListaComprasProduto produto) {
 		this.produtos.remove(produto);
 	}
 	

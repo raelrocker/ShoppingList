@@ -1,16 +1,15 @@
 package com.example.shoppinglist;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import controllers.ListaComprasController;
 import controllers.ProdutoController;
 import dependencyManager.DependencyManager;
 import entities.IListaCompras;
+import entities.IListaComprasProduto;
 import entities.IProduto;
-import entities.ListaCompras;
-import entities.Produto;
+import entities.ListaComprasProduto;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,17 +24,17 @@ public class MainActivity extends Activity {
 		Boolean r = false;
 		setContentView(R.layout.activity_main);
 		SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		ProdutoController l = DependencyManager.GetProdutoController(this);
 		
-		Produto lista = new Produto(0, "PRODUTO 2", 10.25, sdf.format(new Date()), sdf.format(new Date()));
-		r = l.saveProduto(lista);
-		lista.setNome("PRODUTO 2 MODIFICADO");
-		r = l.updateProduto(lista);
-		r = l.deleteProduto(lista.getId());
-		ArrayList<IProduto> listas = l.findAllProdutos();
+		ListaComprasController l = DependencyManager.GetListaComprasController(this);
+		ProdutoController p = DependencyManager.GetProdutoController(this);
+		IListaCompras listaCompras = l.findListaCompras(1);
+		IProduto produto = p.findProduto(1);
+		IListaComprasProduto item = new ListaComprasProduto(produto, 1, "UN", false, sdf.format(new Date()), sdf.format(new Date()));
+		listaCompras.addProduto(item);
+		r = l.saveProduto(listaCompras, item);
 		
-		for (IProduto lc : listas) {
-			Log.i("PRODUTO", lc.getId() + " " + lc.getNome() + " " + lc.getPreco() + lc.getDataCriacao() + " " + lc.getDataModificacao());
+		for (IListaComprasProduto i : l.findAllProdutos(listaCompras)) {
+			Log.i("ITEM", i.getProduto().getNome() + " " + i.getQuantidade() + " " + i.getUnidade());
 		}
 		
 	}

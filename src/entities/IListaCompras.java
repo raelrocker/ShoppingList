@@ -21,12 +21,12 @@ public interface IListaCompras {
 
 	public abstract String getNome();
 	
-	public abstract ArrayList<IProduto> getProdutos();
+	public abstract ArrayList<IListaComprasProduto> getProdutos();
 	
-	public abstract void setProdutos(ArrayList<IProduto> produtos);
+	public abstract void setProdutos(ArrayList<IListaComprasProduto> produtos);
 	
-	public abstract void addProduto(IProduto produto);
+	public abstract void addProduto(IListaComprasProduto produto);
 	
-	public abstract void removeProduto(IProduto produto);
+	public abstract void removeProduto(IListaComprasProduto produto);
 
 }
