@@ -22,6 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ProdutosActivity"
+            android:label="@string/title_activity_produtos" >
+        </activity>
+        <activity
+            android:name=".MostarProdutosActivity"
+            android:label="@string/title_activity_mostar_produtos" >
+        </activity>
     </application>
 
 </manifest>

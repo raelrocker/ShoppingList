@@ -1,6 +1,8 @@
 package entities;
 
-public class Produto implements IProduto {
+import java.io.Serializable;
+
+public class Produto implements IProduto, Serializable {
 	private int id;
 	private String nome;
 	private Double preco;

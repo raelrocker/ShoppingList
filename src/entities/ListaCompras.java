@@ -86,6 +86,10 @@ public class ListaCompras implements IListaCompras {
 		this.produtos.remove(produto);
 	}
 	
+	@Override
+	public String toString() {
+		return this.nome;
+	}
 	
 	
 	

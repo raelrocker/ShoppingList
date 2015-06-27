@@ -4,5 +4,7 @@
     <string name="app_name">ShoppingList</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_produtos">ProdutosActivity</string>
+    <string name="title_activity_mostar_produtos">MostarProdutosActivity</string>
 
 </resources>
