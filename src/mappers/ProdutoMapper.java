@@ -1,6 +1,8 @@
 package mappers;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -19,16 +21,20 @@ public class ProdutoMapper implements IProdutoMapper {
 	
 	@Override
 	public Boolean save(IProduto produto) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
+		String data = sdf.format(new Date());
 		ContentValues contentValues = new ContentValues();
 		contentValues.put("nome", produto.getNome());
 		contentValues.put("preco", produto.getPreco());
-		contentValues.put("data_criacao", produto.getDataCriacao());
-		contentValues.put("data_modificacao", produto.getDataModificacao());
+		contentValues.put("data_criacao", data);
+		contentValues.put("data_modificacao", data);
 		
 		int id = (int) this.banco.insert(this.nomeTabela, null, contentValues);
 		if (id > 0) {
 			produto.setId(id);
+			produto.setDataCriacao(data);
+			produto.setDataModificacao(data);
 			return true;
 		}
 		
@@ -38,12 +44,19 @@ public class ProdutoMapper implements IProdutoMapper {
 	
 	@Override
 	public Boolean update(IProduto produto) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String data = sdf.format(new Date());
 		ContentValues contentValues = new ContentValues();
 		contentValues.put("nome", produto.getNome());
 		contentValues.put("preco", produto.getPreco());
 		contentValues.put("data_criacao", produto.getDataCriacao());
-		contentValues.put("data_modificacao", produto.getDataModificacao());
-		return this.banco.update(this.nomeTabela, contentValues, "id = ?", new String[]{String.valueOf(produto.getId())}) > 0;
+		contentValues.put("data_modificacao", data);
+		if (this.banco.update(this.nomeTabela, contentValues, "id = ?", new String[]{String.valueOf(produto.getId())}) > 0) {
+			produto.setDataModificacao(data);
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	@Override
@@ -99,6 +112,17 @@ public class ProdutoMapper implements IProdutoMapper {
         }
 		
 		return produtos;
+	}
+	
+	@Override
+	public Boolean isProdutoInListaCompras(int id) {
+		int quant = 0;
+		Cursor cursor = banco.rawQuery("SELECT COUNT(*) quant FROM lista_compras_produtos WHERE produto_id = ?", new String[]{String.valueOf(id)});
+		if (cursor != null) {
+			quant = cursor.getInt(0);
+		}
+		
+		return quant > 0;
 	}
 
 }

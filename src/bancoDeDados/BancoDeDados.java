@@ -1,5 +1,6 @@
 package bancoDeDados;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -9,7 +10,7 @@ public class BancoDeDados implements IBancoDeDados {
 	private static final String DB_NAME = "ShoppingList.db";
 	private static final String DB_CREATE_TABLE_LISTA_COMPRAS = "CREATE TABLE IF NOT EXISTS  lista_compras (id integer primary key autoincrement, nome text not null, data_criacao text not null, data_modificacao text not null);";
 	private static final String DB_CREATE_TABLE_PRODUTOS = "CREATE TABLE IF NOT EXISTS  produtos (id integer primary key autoincrement, nome text not null, preco double not null, data_criacao text not null, data_modificacao text not null);";
-	private static final String DB_CREATE_TABLE_LISTA_COMPRAS_PRODUTOS = "CREATE TABLE IF NOT EXISTS  lista_compras_produtos (lista_compras_id integer not null, produto_id integer not null, quantidade double, unidade character not null, no_carrinho boolean not null, data_criacao text not null, data_modificacao text not null, PRIMARY KEY(lista_compras_id, produto_id), FOREIGN KEY(lista_compras_id) REFERENCES lista_compras(id), FOREIGN KEY(produto_id) REFERENCES produtos(id));";
+	private static final String DB_CREATE_TABLE_LISTA_COMPRAS_PRODUTOS = "CREATE TABLE IF NOT EXISTS  lista_compras_produtos (lista_compras_id integer not null, produto_id integer not null, quantidade double, unidade character not null, no_carrinho boolean not null, data_criacao text not null, data_modificacao text not null, PRIMARY KEY(lista_compras_id, produto_id), FOREIGN KEY(lista_compras_id) REFERENCES lista_compras(id), FOREIGN KEY(produto_id) REFERENCES produtos(id) on update cascade on delete restrict);";
 	
 	public BancoDeDados() {}
 	
@@ -18,7 +19,20 @@ public class BancoDeDados implements IBancoDeDados {
 		
 		if (BancoDeDados.banco == null) {
 			BancoDeDados.banco = this.SetBancoDeDados(context);
-		}		
+		}	
+		
+//		ContentValues contentValues = new ContentValues();
+//		contentValues.put("lista_compras_id", 2);
+//		contentValues.put("produto_id", 24);
+//		contentValues.put("quantidade", 1);
+//		contentValues.put("unidade", "KG");
+//		contentValues.put("no_carrinho", 1);
+//		contentValues.put("data_criacao", "2015-01-01 00:00:00");
+//		contentValues.put("data_modificacao", "2015-01-01 00:00:00");
+//		
+//		BancoDeDados.banco.insert("lista_compras_produtos", null, contentValues);
+		
+		
 		return BancoDeDados.banco;
 	}
 	
@@ -32,6 +46,7 @@ public class BancoDeDados implements IBancoDeDados {
 		bd.execSQL(BancoDeDados.DB_CREATE_TABLE_LISTA_COMPRAS);
 		bd.execSQL(BancoDeDados.DB_CREATE_TABLE_PRODUTOS);
 		bd.execSQL(BancoDeDados.DB_CREATE_TABLE_LISTA_COMPRAS_PRODUTOS);
+		
 		return bd;
 	}
 	

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class ProdutosActivity extends Activity implements OnClickListener {
 
@@ -48,19 +49,25 @@ public class ProdutosActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		
 		if (v.getId() == R.id.btnProdutoSalvar) {
-			ProdutoController pc = DependencyManager.GetProdutoController(this);
-			this.produto.setNome(txtNome.getText().toString());
-			this.produto.setPreco(Double.parseDouble(txtPreco.getText().toString()));
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			this.produto.setDataModificacao(sdf.format(new Date()));
-			if (this.produto.getId() == 0) {
-				this.produto.setDataCriacao(sdf.format(new Date()));
-				pc.saveProduto(produto);
-			} else {
-				pc.updateProduto(produto);
+			try {
+				ProdutoController pc = DependencyManager.GetProdutoController(this);
+				this.produto.setNome(txtNome.getText().toString());
+				this.produto.setPreco(txtPreco.getText().toString().isEmpty() ? 0.00 : Double.parseDouble(txtPreco.getText().toString()));
+				
+				if (pc.validarProduto(produto)) {
+					
+					if (this.produto.getId() == 0) {
+						pc.saveProduto(produto);
+					} else {
+						pc.updateProduto(produto);
+					}
+				}
+				
+				setResult(this.operacao);
+				finish();
+			} catch (Exception ex) {
+				Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
 			}
-			setResult(this.operacao);
-			finish();
 			
 		}
 		

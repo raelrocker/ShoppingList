@@ -44,6 +44,7 @@ public class MostarProdutosActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		registerForContextMenu(getListView());
+		
 		adapter = new ProdutoAdapter(this, R.layout.listview_item_row_produtos, arrProdutos);
 		View header = (View)getLayoutInflater().inflate(R.layout.listview_header_row_produtos, null);
 		this.getListView().addHeaderView(header);
@@ -58,9 +59,7 @@ public class MostarProdutosActivity extends ListActivity {
 		arrProdutos = pc.findAllProdutos();
 		adapter.clear();
 		adapter.addAll(arrProdutos);
-		adapter.notifyDataSetInvalidated();
-		
-		 
+		adapter.notifyDataSetChanged();
 	}
 	
 	@Override
@@ -154,12 +153,16 @@ public class MostarProdutosActivity extends ListActivity {
 	}
 	
 	public void RemoverProduto() {
-		if(pc.deleteProduto(removerProduto.getId())) {
-			Toast.makeText(this, "Produto removido", Toast.LENGTH_LONG).show();
-			FillLista();
-			removerProduto = null;
-		} else {
-			removerProduto = null;
+		try {
+			if(pc.deleteProduto(removerProduto.getId())) {
+				Toast.makeText(this, "Produto removido", Toast.LENGTH_LONG).show();
+				FillLista();
+				removerProduto = null;
+			} else {
+				removerProduto = null;
+			}
+		} catch (Exception ex) {
+			Toast.makeText(this, "Este produto não pode ser deletado", Toast.LENGTH_LONG).show();
 		}
 	}
 

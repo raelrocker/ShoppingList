@@ -20,8 +20,11 @@ public class ProdutoController {
 		return this.produtoMapper.update(produto);
 	}
 	
-	public Boolean deleteProduto(int id) {
-		return this.produtoMapper.delete(id);
+	public Boolean deleteProduto(int id) throws Exception {
+		if (!this.produtoMapper.isProdutoInListaCompras(id)) {
+			return this.produtoMapper.delete(id);
+		}
+		throw new Exception();
 	}
 	
 	public IProduto findProduto(int id) {
@@ -30,5 +33,12 @@ public class ProdutoController {
 	
 	public ArrayList<IProduto> findAllProdutos() {
 		return this.produtoMapper.findAll();
+	}
+	
+	public Boolean validarProduto(IProduto produto) throws Exception {
+		if (produto.getNome().isEmpty()) {
+			throw new Exception("Informe o nome do produto");
+		}
+		return true;
 	}
 }

@@ -15,5 +15,7 @@ public interface IProdutoMapper {
 	public IProduto find(int id);
 
 	public ArrayList<IProduto> findAll();
+	
+	public Boolean isProdutoInListaCompras(int id);
 
 }
