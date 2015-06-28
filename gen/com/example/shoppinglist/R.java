@@ -32,11 +32,12 @@ public final class R {
         public static final int lblProdutoNome=0x7f080002;
         public static final int lblProdutoPreco=0x7f080004;
         public static final int lstListaCompras=0x7f080001;
-        public static final int menuNovaLista=0x7f08000a;
-        public static final int menuNovoProduto=0x7f08000c;
-        public static final int menuSobre=0x7f08000d;
-        public static final int menuVerProdutos=0x7f08000b;
+        public static final int menuNovaLista=0x7f08000b;
+        public static final int menuNovoProduto=0x7f08000d;
+        public static final int menuSobre=0x7f08000e;
+        public static final int menuVerProdutos=0x7f08000c;
         public static final int txtHeader=0x7f080007;
+        public static final int txtNomeNovaLista=0x7f08000a;
         public static final int txtProdutoNome=0x7f080003;
         public static final int txtProdutoPreco=0x7f080005;
     }
@@ -46,6 +47,7 @@ public final class R {
         public static final int activity_produtos=0x7f030002;
         public static final int listview_header_row_produtos=0x7f030003;
         public static final int listview_item_row_produtos=0x7f030004;
+        public static final int nova_lista_de_compras=0x7f030005;
     }
     public static final class menu {
         public static final int main=0x7f070000;
