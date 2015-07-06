@@ -1,3 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
+    <issue id="InflateParams">
+        <ignore path="src/com/example/shoppinglist/MainActivity.java" />
+    </issue>
+    <issue id="SimpleDateFormat">
+        <ignore path="src/com/example/shoppinglist/ListaComprasActivity.java" />
+        <ignore path="src/com/example/shoppinglist/MainActivity.java" />
+    </issue>
+    <issue id="UseSparseArrays">
+        <ignore path="src/mappers/ProdutoMapper.java" />
+    </issue>
 </lint>

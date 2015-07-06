@@ -21,18 +21,7 @@ public class BancoDeDados implements IBancoDeDados {
 			BancoDeDados.banco = this.SetBancoDeDados(context);
 		}	
 		
-//		ContentValues contentValues = new ContentValues();
-//		contentValues.put("lista_compras_id", 2);
-//		contentValues.put("produto_id", 24);
-//		contentValues.put("quantidade", 1);
-//		contentValues.put("unidade", "KG");
-//		contentValues.put("no_carrinho", 1);
-//		contentValues.put("data_criacao", "2015-01-01 00:00:00");
-//		contentValues.put("data_modificacao", "2015-01-01 00:00:00");
-//		
-//		BancoDeDados.banco.insert("lista_compras_produtos", null, contentValues);
-		
-		
+
 		return BancoDeDados.banco;
 	}
 	
@@ -46,6 +35,10 @@ public class BancoDeDados implements IBancoDeDados {
 		bd.execSQL(BancoDeDados.DB_CREATE_TABLE_LISTA_COMPRAS);
 		bd.execSQL(BancoDeDados.DB_CREATE_TABLE_PRODUTOS);
 		bd.execSQL(BancoDeDados.DB_CREATE_TABLE_LISTA_COMPRAS_PRODUTOS);
+		
+//		bd.execSQL("drop table lista_compras");
+//		bd.execSQL("drop table produtos");
+//		bd.execSQL("drop table lista_compras_produtos");
 		
 		return bd;
 	}

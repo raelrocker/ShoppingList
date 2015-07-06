@@ -1,8 +1,11 @@
 package mappers;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -10,6 +13,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import entities.IProduto;
 import entities.Produto;
+import entities.ProdutoComprado;
 
 public class ProdutoMapper implements IProdutoMapper {
 	private SQLiteDatabase banco;
@@ -118,11 +122,34 @@ public class ProdutoMapper implements IProdutoMapper {
 	public Boolean isProdutoInListaCompras(int id) {
 		int quant = 0;
 		Cursor cursor = banco.rawQuery("SELECT COUNT(*) quant FROM lista_compras_produtos WHERE produto_id = ?", new String[]{String.valueOf(id)});
-		if (cursor != null) {
-			quant = cursor.getInt(0);
+		
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			quant = cursor.getInt(cursor.getColumnIndex("quant"));
 		}
 		
 		return quant > 0;
+	}
+	
+	
+	@Override
+	public ArrayList<ProdutoComprado> findMaisComprados() {		
+		Cursor cursor = banco.rawQuery("SELECT produto_id, SUM(quantidade) qnt FROM lista_compras_produtos "
+										+ "GROUP BY produto_id "
+										+ "ORDER BY qnt DESC ", null);
+		ArrayList<ProdutoComprado> array = new ArrayList<ProdutoComprado>();
+        while(cursor.moveToNext()){
+        	try {
+        		IProduto produto = find(cursor.getInt(cursor.getColumnIndex("produto_id")));
+        		Double qnt = cursor.getDouble(cursor.getColumnIndex("qnt"));
+        		ProdutoComprado pc = new ProdutoComprado(produto, qnt);
+        		array.add(pc);
+        	} catch (Exception ex) {
+        		Log.i("ERRO", ex.getMessage());
+        	}
+        }
+		
+		return array;
 	}
 
 }

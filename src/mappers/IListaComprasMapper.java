@@ -19,7 +19,7 @@ public interface IListaComprasMapper {
 	
 	public abstract Boolean saveProduto(IListaCompras listaCompras, IListaComprasProduto listaComprasProduto);
 	
-	public abstract Boolean updateProduto(IListaCompras listaCompras, IListaComprasProduto listaComprasProduto);
+	public abstract Boolean updateQuantidadeProduto(IListaCompras listaCompras, IListaComprasProduto listaComprasProduto);
 	
 	public abstract Boolean deleteProduto(IListaCompras listaCompra, int idProduto);
 	

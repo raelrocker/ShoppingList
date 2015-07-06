@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import mappers.IProdutoMapper;
 import entities.IProduto;
+import entities.ProdutoComprado;
 
 public class ProdutoController {
 	private IProdutoMapper produtoMapper;
@@ -40,5 +41,9 @@ public class ProdutoController {
 			throw new Exception("Informe o nome do produto");
 		}
 		return true;
+	}
+	
+	public ArrayList<ProdutoComprado> findMaisComprados() {
+		return produtoMapper.findMaisComprados();
 	}
 }

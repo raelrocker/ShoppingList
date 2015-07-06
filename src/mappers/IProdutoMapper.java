@@ -1,8 +1,10 @@
 package mappers;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import entities.IProduto;
+import entities.ProdutoComprado;
 
 public interface IProdutoMapper {
 
@@ -17,5 +19,7 @@ public interface IProdutoMapper {
 	public ArrayList<IProduto> findAll();
 	
 	public Boolean isProdutoInListaCompras(int id);
+	
+	public ArrayList<ProdutoComprado> findMaisComprados();
 
 }

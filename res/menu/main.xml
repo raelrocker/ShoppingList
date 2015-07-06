@@ -15,8 +15,8 @@
         android:icon="@android:drawable/ic_menu_recent_history"
         android:title="Novo Produto"/>
     <item
-        android:id="@+id/menuSobre"
+        android:id="@+id/menuMaisComprados"
         android:icon="@android:drawable/ic_menu_info_details"
-        android:title="Sobre"/>
+        android:title="Mais Comprados"/>
 
 </menu>

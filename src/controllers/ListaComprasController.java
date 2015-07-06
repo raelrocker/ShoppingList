@@ -39,10 +39,10 @@ public class ListaComprasController {
 	}
 	
 	public Boolean updateProduto(IListaCompras listaCompras, IListaComprasProduto produto) {
-		return this.listaComprasMapper.updateProduto(listaCompras, produto);
+		return this.listaComprasMapper.updateQuantidadeProduto(listaCompras, produto);
 	}
 	
-	public Boolean deleteListaCompras(IListaCompras listaCompras, int id) {
+	public Boolean deleteProduto(IListaCompras listaCompras, int id) {
 		return this.listaComprasMapper.deleteProduto(listaCompras, id);
 	}
 	
@@ -51,7 +51,24 @@ public class ListaComprasController {
 	}
 	
 	public ArrayList<IListaComprasProduto> findAllProdutos(IListaCompras listaCompras) {
-		return this.listaComprasMapper.findAllProdutos(listaCompras);
+		ArrayList<IListaComprasProduto> produtos = this.listaComprasMapper.findAllProdutos(listaCompras);
+		listaCompras.setProdutos(produtos);
+		return produtos;
+	}
+	
+	public Boolean validarListaCompras(IListaCompras lista) throws Exception {
+		if (lista.getNome().isEmpty()) {
+			throw new Exception("Informe o nome da lista de compras");
+		}
+		return true;
+	}
+	
+	public double totalDeProdutos(IListaCompras lista) {
+		Double itens = 0.0;
+		for (IListaComprasProduto item : lista.getProdutos()) {
+			itens += item.getQuantidade();
+		}
+		return itens;
 	}
 	
 	

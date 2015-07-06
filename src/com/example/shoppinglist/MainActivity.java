@@ -4,15 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import controllers.ListaComprasController;
-import dependencyManager.DependencyManager;
-import entities.IListaCompras;
-import entities.IProduto;
-import entities.ListaCompras;
-import entities.Produto;
 import adapters.ListaComprasAdapter;
-import adapters.ProdutoAdapter;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
@@ -20,39 +12,39 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
+import controllers.ListaComprasController;
+import dependencyManager.DependencyManager;
+import entities.IListaCompras;
+import entities.ListaCompras;
 
-public class MainActivity extends ListActivity {
+public class MainActivity extends ListActivity implements OnItemClickListener {
 
-	ListView lstListaCompras;
-	ListaComprasAdapter adapter;
-	ArrayList<IListaCompras> lstListas = new ArrayList<IListaCompras>();
-	IListaCompras listaSelecionada = null;
+	private ListaComprasAdapter adapter;
+	private ArrayList<IListaCompras> lstListas = new ArrayList<IListaCompras>();
+	private IListaCompras listaSelecionada = null;
 	public static int MAIN_ACTIVITY = 1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//setContentView(R.layout.activity_main);
-		registerForContextMenu(getListView());
-		
-		adapter = new ListaComprasAdapter(this, R.layout.listview_item_row_lista_compras, this.lstListas);
-		
+		registerForContextMenu(getListView());		
+		adapter = new ListaComprasAdapter(this, R.layout.listview_item_row_lista_compras, this.lstListas);		
 		this.getListView().setAdapter(adapter);
 		this.FillListaCompras();
+		this.getListView().setOnItemClickListener(this);
 	}
 	
-	 @Override
+	@Override
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
         MenuInflater mi = getMenuInflater();
@@ -60,112 +52,12 @@ public class MainActivity extends ListActivity {
         return true;
     }
 	
-	
-	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == 1) {
 			Toast.makeText(this, "PRODUTO SALVO ", Toast.LENGTH_LONG).show();
 		}
 	}
-	
-	private void FillListaCompras() {
-		ListaComprasController ls = DependencyManager.GetListaComprasController(this);
-		this.lstListas = ls.findAllListaCompras();
-		adapter.clear();
-		adapter.addAll(this.lstListas);
-		adapter.notifyDataSetChanged();
-	}
-	
-	public void novaListaDialog(String nome) {
-		LayoutInflater inflater = this.getLayoutInflater();
-	    final View inflator = inflater.inflate(R.layout.nova_lista_de_compras, null);
-	    final EditText txtNomeNovaLista = (EditText)inflator.findViewById(R.id.txtNomeNovaLista);
-	    txtNomeNovaLista.setText(nome);
-	    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-	        //@Override
-	        public void onClick(DialogInterface dialog, int which) {
-	            switch (which){
-		            case DialogInterface.BUTTON_POSITIVE:
-		            	salvarLista(txtNomeNovaLista.getText().toString());
-		                break;
-	
-		            case DialogInterface.BUTTON_NEGATIVE:
-		                break;
-	            }
-	        }
-	    };
-	    
-	    AlertDialog.Builder ab = new AlertDialog.Builder(this);
-	    ab.setView(inflator);
-	    ab.setMessage("Nova Lista de Compras")
-	        .setPositiveButton("Salvar", dialogClickListener)
-	        .setNegativeButton("Cancelar", dialogClickListener)
-	        .show();
-	}
-	
-	public void deleteDialog() {
-	    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-	        //@Override
-	        public void onClick(DialogInterface dialog, int which) {
-	            switch (which){
-		            case DialogInterface.BUTTON_POSITIVE:
-		            	removerLista();
-		                break;
-	
-		            case DialogInterface.BUTTON_NEGATIVE:
-		                break;
-	            }
-	        }
-	    };
-	    AlertDialog.Builder ab = new AlertDialog.Builder(this);
-	    
-	    ab.setMessage("Tem certeza ?")
-	        .setPositiveButton("Confirmar", dialogClickListener)
-	        .setNegativeButton("Cancelar", dialogClickListener)
-	        .show();
-	}
-	
-	public void removerLista() {
-		if (listaSelecionada != null) {
-			ListaComprasController ls = DependencyManager.GetListaComprasController(this);
-			if (ls.deleteListaCompras(listaSelecionada.getId())) {
-				FillListaCompras();
-				Toast.makeText(this, "Lista " + listaSelecionada.getNome() + " deletada", Toast.LENGTH_LONG).show();
-			} else {
-				Toast.makeText(this, "ERRO", Toast.LENGTH_LONG).show();
-			}
-		}
-		listaSelecionada = null;
-	}
-	
-	public void salvarLista(String nomeNovaLista) {
-		SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		ListaComprasController ls = DependencyManager.GetListaComprasController(this);
-		if (listaSelecionada == null) {
-			IListaCompras lista = new ListaCompras();
-			lista.setNome(nomeNovaLista);
-			lista.setDataCriacao(sdf.format(new Date()));
-			lista.setDataModificacao(sdf.format(new Date()));
-			if (ls.saveListaCompras(lista)) {
-				FillListaCompras();
-				Toast.makeText(this, "Nova lista: " + nomeNovaLista, Toast.LENGTH_LONG).show();
-			} else {
-				Toast.makeText(this, "ERRO", Toast.LENGTH_LONG).show();
-			}
-		} else {
-			listaSelecionada.setNome(nomeNovaLista);
-			listaSelecionada.setDataModificacao(sdf.format(new Date()));
-			if (ls.updateListaCompras(listaSelecionada)) {
-				FillListaCompras();
-				listaSelecionada = null;
-				Toast.makeText(this, "Lista editada: " + nomeNovaLista, Toast.LENGTH_LONG).show();
-			} else {
-				Toast.makeText(this, "ERRO", Toast.LENGTH_LONG).show();
-			}
-		}
-	}
-	
 	
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
@@ -203,17 +95,17 @@ public class MainActivity extends ListActivity {
 		    
 		    
 		    switch (item.getItemId()) {
-			case 0:
-				listaSelecionada = lista;
-				novaListaDialog(lista.getNome());
-				break;
-			case 1:
-				listaSelecionada = lista;
-				deleteDialog();
-				break;
-	
-			default:
-				break;
+				case 0:
+					listaSelecionada = lista;
+					novaListaDialog(lista.getNome());
+					break;
+				case 1:
+					listaSelecionada = lista;
+					deleteDialog();
+					break;
+		
+				default:
+					break;
 			}
 		} else {
 			Intent i;
@@ -229,11 +121,150 @@ public class MainActivity extends ListActivity {
 		        	i = new Intent(this, MostarProdutosActivity.class);
 		    		startActivityForResult(i, MAIN_ACTIVITY);
 		            return true;
-		        case R.id.menuSobre:
+		        case R.id.menuMaisComprados:
+		        	i = new Intent(this, MaisVendidosActivity.class);
+		    		startActivity(i);
 		            return true;
 	        }			
 		}
 	    
 	    return true;
 	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
+		Intent i = new Intent(this, ListaComprasActivity.class);
+		ListaCompras lc = (ListaCompras)adapter.getItem(position);
+		i.putExtra("ListaComprasId", lc.getId());
+		startActivity(i);
+	}
+	
+	/**
+	 * Popula a ListView de lista de compras
+	 */
+	private void FillListaCompras() {
+		ListaComprasController ls = DependencyManager.GetListaComprasController(this);
+		this.lstListas = ls.findAllListaCompras();
+		adapter.clear();
+		adapter.addAll(this.lstListas);
+		adapter.notifyDataSetChanged();
+	}
+	
+	/**
+	 * Abre o dialog para cadastrar ou atualizar a lista de compras.
+	 * @param nome - nome da lista de compras
+	 */
+	public void novaListaDialog(String nome) {
+		LayoutInflater inflater = this.getLayoutInflater();
+	    final View inflator = inflater.inflate(R.layout.nova_lista_de_compras, null);
+	    final EditText txtNomeNovaLista = (EditText)inflator.findViewById(R.id.txtNomeNovaLista);
+	    txtNomeNovaLista.setText(nome);
+	    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+	        //@Override
+	        public void onClick(DialogInterface dialog, int which) {
+	            switch (which){
+		            case DialogInterface.BUTTON_POSITIVE:
+		            	salvarLista(txtNomeNovaLista.getText().toString());
+		                break;
+	
+		            case DialogInterface.BUTTON_NEGATIVE:
+		                break;
+	            }
+	        }
+	    };
+	    
+	    AlertDialog.Builder ab = new AlertDialog.Builder(this);
+	    ab.setView(inflator);
+	    ab.setMessage("Nova Lista de Compras")
+	        .setPositiveButton("Salvar", dialogClickListener)
+	        .setNegativeButton("Cancelar", dialogClickListener)
+	        .show();
+	}
+	
+	/**
+	 * Abre o dialog para deletar a lista de compras.
+	 */
+	public void deleteDialog() {
+	    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+	        //@Override
+	        public void onClick(DialogInterface dialog, int which) {
+	            switch (which){
+		            case DialogInterface.BUTTON_POSITIVE:
+		            	removerLista();
+		                break;
+	
+		            case DialogInterface.BUTTON_NEGATIVE:
+		                break;
+	            }
+	        }
+	    };
+	    AlertDialog.Builder ab = new AlertDialog.Builder(this);
+	    
+	    ab.setMessage("Tem certeza ?")
+	        .setPositiveButton("Confirmar", dialogClickListener)
+	        .setNegativeButton("Cancelar", dialogClickListener)
+	        .show();
+	}
+	
+	/**
+	 * Delete a lista de compras
+	 */
+	public void removerLista() {
+		if (listaSelecionada != null) {
+			ListaComprasController ls = DependencyManager.GetListaComprasController(this);
+			if (ls.deleteListaCompras(listaSelecionada.getId())) {
+				FillListaCompras();
+				Toast.makeText(this, "Lista " + listaSelecionada.getNome() + " deletada", Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(this, "ERRO", Toast.LENGTH_LONG).show();
+			}
+		}
+		listaSelecionada = null;
+	}
+	
+	/**
+	 * Salva a lista de compras.
+	 * @param nome - NovaLista nome da lista de compras
+	 */
+	public void salvarLista(String nomeNovaLista) {
+		SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		ListaComprasController ls = DependencyManager.GetListaComprasController(this);
+		if (listaSelecionada == null) {
+			IListaCompras lista = new ListaCompras();
+			lista.setNome(nomeNovaLista);
+			
+			try {
+				if (ls.validarListaCompras(lista)) {
+					lista.setDataCriacao(sdf.format(new Date()));
+					lista.setDataModificacao(sdf.format(new Date()));
+					if (ls.saveListaCompras(lista)) {
+						FillListaCompras();
+						Toast.makeText(this, "Nova lista: " + nomeNovaLista, Toast.LENGTH_LONG).show();
+					} else {
+						throw new Exception("Erro ao salvar lista de compras");
+					}
+				}
+			} catch (Exception ex) {
+				Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+			}
+		} else {
+			try {
+				listaSelecionada.setNome(nomeNovaLista);
+				if (ls.validarListaCompras(listaSelecionada)) {
+					listaSelecionada.setDataModificacao(sdf.format(new Date()));
+					if (ls.updateListaCompras(listaSelecionada)) {
+						FillListaCompras();
+						listaSelecionada = null;
+						Toast.makeText(this, "Lista editada: " + nomeNovaLista, Toast.LENGTH_LONG).show();
+					} else {
+						throw new Exception("Erro ao atualizar a lista de compras");
+					}
+				}
+			} catch (Exception ex) {
+				Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+			}
+		}
+	}
+	
+	
 }

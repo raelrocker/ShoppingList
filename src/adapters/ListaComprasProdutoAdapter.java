@@ -1,6 +1,5 @@
 package adapters;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -13,15 +12,15 @@ import android.widget.TextView;
 
 import com.example.shoppinglist.R;
 
+import entities.IListaComprasProduto;
 import entities.IProduto;
 
-public class ProdutoAdapter extends ArrayAdapter<IProduto> {
-
+public class ListaComprasProdutoAdapter extends ArrayAdapter<IListaComprasProduto> {
 	Context context; 
     int layoutResourceId;    
-    ArrayList<IProduto> data = null;
+    ArrayList<IListaComprasProduto> data = null;
 	
-	public ProdutoAdapter(Context context, int layoutResourceId, ArrayList<IProduto> data) {
+	public ListaComprasProdutoAdapter(Context context, int layoutResourceId, ArrayList<IListaComprasProduto> data) {
 		super(context, layoutResourceId, data);
 		this.layoutResourceId = layoutResourceId;
         this.context = context;
@@ -31,36 +30,34 @@ public class ProdutoAdapter extends ArrayAdapter<IProduto> {
 	@Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        ProdutoHolder holder = null;
+        ItemHolder holder = null;
         
         if(row == null)
         {
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
             
-            holder = new ProdutoHolder();
-            holder.lblNomeProduto = (TextView)row.findViewById(R.id.lblNomeProduto);
-            holder.lblPrecoProduto = (TextView)row.findViewById(R.id.lblPrecoProduto);
+            holder = new ItemHolder();
+            holder.lblItemNome = (TextView)row.findViewById(R.id.lblItemNome);
+            holder.lblItemQuantidade = (TextView)row.findViewById(R.id.lblItemQuantidade);
             
             row.setTag(holder);
         }
         else
         {
-            holder = (ProdutoHolder)row.getTag();
+            holder = (ItemHolder)row.getTag();
         }
-        DecimalFormat df = new DecimalFormat("#,##0.00");
-        IProduto produto = data.get(position);
-        holder.lblNomeProduto.setText(produto.getNome());        
-        holder.lblPrecoProduto.setText("R$ " + String.valueOf(df.format(produto.getPreco())));
+        
+        IListaComprasProduto item = data.get(position);
+        holder.lblItemNome.setText(item.getProduto().getNome());
+        holder.lblItemQuantidade.setText("Qnt: " + String.valueOf(item.getQuantidade()));
         
         return row;
     }
     
-    static class ProdutoHolder
+    static class ItemHolder
     {
-    	TextView lblNomeProduto;
-        TextView lblPrecoProduto;
+    	TextView lblItemNome;
+        TextView lblItemQuantidade;
     }
-	
-	
 }

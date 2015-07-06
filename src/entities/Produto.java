@@ -75,6 +75,11 @@ public class Produto implements IProduto, Serializable {
 		this.dataModificacao = dataModificacao;
 	}
 	
+	@Override
+	public String toString() {
+		return this.nome;
+	}
+	
 	
 	
 }

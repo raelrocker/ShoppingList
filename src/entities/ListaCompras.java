@@ -1,9 +1,10 @@
 package entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class ListaCompras implements IListaCompras {
+public class ListaCompras implements IListaCompras, Serializable {
 	private int id;
 	private String nome;
 	private String dataCriacao;

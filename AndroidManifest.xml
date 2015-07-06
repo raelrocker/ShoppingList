@@ -3,6 +3,7 @@
     package="com.example.shoppinglist"
     android:versionCode="1"
     android:versionName="1.0" >
+
     <uses-sdk
         android:minSdkVersion="15"
         android:targetSdkVersion="15" />
@@ -27,7 +28,20 @@
         </activity>
         <activity
             android:name=".MostarProdutosActivity"
-            android:label="@string/title_activity_mostar_produtos" >
+            android:label="Produtos cadastrados" >
+        </activity>
+        <activity
+            android:name=".ListaComprasActivity"
+            android:label="@string/title_activity_lista_compras" >
+        </activity>
+        <activity
+            android:name=".AddProdutosActivity"
+            android:label="@string/title_activity_add_produtos"
+            android:theme="@style/AppTheme" >
+        </activity>
+        <activity
+            android:name=".MaisVendidosActivity"
+            android:label="@string/title_activity_mais_vendidos" >
         </activity>
     </application>
 
