@@ -7,6 +7,7 @@ public class ListaComprasProduto implements IListaComprasProduto {
 	private boolean noCarrinho;
 	private String dataCriacao;
 	private String dataModificacao;
+	private Double preco;
 	
 	@Override
 	public IProduto getProduto() {
@@ -67,10 +68,20 @@ public class ListaComprasProduto implements IListaComprasProduto {
 	public void setDataModificacao(String dataModificacao) {
 		this.dataModificacao = dataModificacao;
 	}
+	
+	@Override
+	public void setPreco(Double preco) {
+		this.preco = preco;
+	}
 
+	@Override
+	public Double getPreco() {
+		return this.preco;
+	}
+	
 	public ListaComprasProduto(IProduto produto, double quantidade,
 			String unidade, boolean noCarrinho, String dataCriacao,
-			String dataModificacao) {
+			String dataModificacao, Double preco) {
 		super();
 		this.produto = produto;
 		this.quantidade = quantidade;
@@ -78,6 +89,7 @@ public class ListaComprasProduto implements IListaComprasProduto {
 		this.noCarrinho = noCarrinho;
 		this.dataCriacao = dataCriacao;
 		this.dataModificacao = dataModificacao;
+		this.preco = preco;
 	}
 
 	public ListaComprasProduto() {
@@ -87,7 +99,10 @@ public class ListaComprasProduto implements IListaComprasProduto {
 		this.noCarrinho = false;
 		this.dataCriacao = "";
 		this.dataModificacao = "";
+		this.preco = 0.0;
 	}
+
+	
 	
 	
 	

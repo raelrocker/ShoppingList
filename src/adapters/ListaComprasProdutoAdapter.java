@@ -1,6 +1,8 @@
 package adapters;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Context;
@@ -53,8 +55,8 @@ public class ListaComprasProdutoAdapter extends ArrayAdapter<IListaComprasProdut
         IListaComprasProduto item = data.get(position);
         holder.lblItemNome.setText(item.getProduto().getNome());
         holder.lblItemQuantidade.setText("Qnt: " + String.valueOf((int)item.getQuantidade()));
-        holder.lblItemValor.setText("Vlr R$: " + String.valueOf(item.getProduto().getPreco()));
-        holder.lblItemTotal.setText("Total R$: " + String.valueOf(item.getProduto().getPreco() * item.getQuantidade()));
+        holder.lblItemValor.setText("Vlr: " + String.valueOf(NumberFormat.getCurrencyInstance(new Locale ("pt", "BR")).format(item.getPreco())));
+        holder.lblItemTotal.setText("Total: " + String.valueOf(NumberFormat.getCurrencyInstance(new Locale ("pt", "BR")).format(item.getPreco() * item.getQuantidade())));
         
         return row;
     }

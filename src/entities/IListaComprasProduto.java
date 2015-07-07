@@ -25,5 +25,9 @@ public interface IListaComprasProduto {
 	public String getDataModificacao();
 
 	public void setDataModificacao(String dataModificacao);
+	
+	public void setPreco(Double preco);
+	
+	public Double getPreco();
 
 }

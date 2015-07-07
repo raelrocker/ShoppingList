@@ -40,7 +40,7 @@ public class ListaComprasController {
 	}
 	
 	public Boolean updateProduto(IListaCompras listaCompras, IListaComprasProduto produto) {
-		return this.listaComprasMapper.updateQuantidadeProduto(listaCompras, produto);
+		return this.listaComprasMapper.updateProduto(listaCompras, produto);
 	}
 	
 	public Boolean deleteProduto(IListaCompras listaCompras, int id) {
@@ -75,7 +75,7 @@ public class ListaComprasController {
 	public Double valorTotalDeProdutos(IListaCompras lista) {
 		Double total = 0.0;
 		for (IListaComprasProduto item : lista.getProdutos()) {
-			total += item.getQuantidade() * item.getProduto().getPreco();
+			total += item.getQuantidade() * item.getPreco();
 		}
 		return total;
 	}

@@ -77,8 +77,6 @@ public class ListaComprasActivity extends Activity implements OnItemLongClickLis
 		this.getWindow().getDecorView().setBackgroundColor(Color.argb(255, 200, 200, 200));
 	}
 
-	
-	
 	@Override
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
@@ -118,10 +116,14 @@ public class ListaComprasActivity extends Activity implements OnItemLongClickLis
     }
     
     public void addProdutoDialog() {
+    	
 		LayoutInflater inflater = this.getLayoutInflater();
 	    final View inflator = inflater.inflate(R.layout.add_produto, null);
 	    final Spinner spinnerProdutos = (Spinner)inflator.findViewById(R.id.spinnerProdutos);
 	    final EditText txtQuantidade = (EditText)inflator.findViewById(R.id.txtItemQuantidade);
+	    final EditText txtValor = (EditText)inflator.findViewById(R.id.txtItemNovoValor);
+	    final TextView lblValor = (TextView)inflator.findViewById(R.id.lblItemNovoValor);
+	    
 	    ArrayAdapter<IProduto> ad;
 	    if (itemSelecionado != null) {
 	    	ArrayList<IProduto> ls = new ArrayList<IProduto>();
@@ -129,9 +131,12 @@ public class ListaComprasActivity extends Activity implements OnItemLongClickLis
 	    	ad = new ArrayAdapter<IProduto>(this, android.R.layout.simple_spinner_dropdown_item, ls);
 		    spinnerProdutos.setAdapter(ad);
 		    txtQuantidade.setText(String.valueOf((int)itemSelecionado.getQuantidade()));
+		    txtValor.setText(String.valueOf(itemSelecionado.getPreco()));
 	    } else {
 	    	ad = new ArrayAdapter<IProduto>(this, android.R.layout.simple_spinner_dropdown_item, lsProdutos);
 		    spinnerProdutos.setAdapter(ad);
+		    txtValor.setVisibility(View.INVISIBLE);
+		    lblValor.setVisibility(View.INVISIBLE);
 	    }
 	    
 	    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -141,7 +146,9 @@ public class ListaComprasActivity extends Activity implements OnItemLongClickLis
 		            case DialogInterface.BUTTON_POSITIVE:
 		            	IProduto produto = (IProduto)spinnerProdutos.getSelectedItem();
 		            	String q = txtQuantidade.getText().toString();
-		            	salvarLista(produto, Double.parseDouble(q));
+		            	String preco = txtValor.getText().toString();
+		            	preco = preco.isEmpty() ? "0.0" : preco; 
+		            	salvarLista(produto, Double.parseDouble(q), Double.parseDouble(preco));
 		                break;
 	
 		            case DialogInterface.BUTTON_NEGATIVE:
@@ -158,7 +165,7 @@ public class ListaComprasActivity extends Activity implements OnItemLongClickLis
 	        .show();
 	}
     
-    public void salvarLista(IProduto p, Double qnt) {
+    public void salvarLista(IProduto p, Double qnt, Double preco) {
     	
     	try {
     	
@@ -166,10 +173,15 @@ public class ListaComprasActivity extends Activity implements OnItemLongClickLis
 	    	if (itemSelecionado != null && p.getId() == itemSelecionado.getProduto().getId()) {
 	    		itemSelecionado.setDataModificacao(sdf.format(new Date()));
 	    		itemSelecionado.setQuantidade(qnt);
-		    	listaController.updateProduto(this.listaCompras, itemSelecionado);
+	    		itemSelecionado.setPreco(preco);
+		    	if (listaController.updateProduto(this.listaCompras, itemSelecionado)) {
+		    		itemSelecionado.getProduto().setPreco(preco);
+		    		itemSelecionado.getProduto().setDataModificacao(sdf.format(new Date()));
+		    		produtoController.updateProduto(itemSelecionado.getProduto());
+		    	}
 		    	
 	    	} else {
-		    	ListaComprasProduto item = new ListaComprasProduto(p, qnt, "UN", false, sdf.format(new Date()), sdf.format(new Date()));
+		    	ListaComprasProduto item = new ListaComprasProduto(p, qnt, "UN", false, sdf.format(new Date()), sdf.format(new Date()), p.getPreco());
 		    	listaController.saveProduto(this.listaCompras, item);
 	    	}
     	} catch (Exception ex) {
@@ -187,7 +199,6 @@ public class ListaComprasActivity extends Activity implements OnItemLongClickLis
     	
     	lblValorTotal.setText("TOTAL R$ " + String.valueOf(NumberFormat.getCurrencyInstance(new Locale ("pt", "BR")).format(listaController.valorTotalDeProdutos(listaCompras))));
     }
-
 
 	@Override
 	public boolean onItemLongClick (AdapterView<?> parent, View view, int position, long id) {

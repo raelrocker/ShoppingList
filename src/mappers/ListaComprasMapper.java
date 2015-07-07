@@ -1,6 +1,8 @@
 package mappers;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -102,6 +104,7 @@ public class ListaComprasMapper implements IListaComprasMapper {
 		return listas;
 	}
 	
+	@Override
 	public Boolean saveProduto(IListaCompras listaCompras, IListaComprasProduto listaComprasProduto) {
 		IListaComprasProduto produtoNaLista = findProduto(listaCompras, listaComprasProduto.getProduto().getId());
 		if (produtoNaLista == null) {
@@ -114,6 +117,7 @@ public class ListaComprasMapper implements IListaComprasMapper {
 			contentValues.put("no_carrinho", listaComprasProduto.isNoCarrinho());
 			contentValues.put("data_criacao", listaCompras.getDataCriacao());
 			contentValues.put("data_modificacao", listaCompras.getDataModificacao());
+			contentValues.put("preco", listaComprasProduto.getPreco());
 			
 			int id = (int)this.banco.insert(this.nomeTabelaProdutos, null, contentValues);
 			if (id > 0) {
@@ -121,14 +125,18 @@ public class ListaComprasMapper implements IListaComprasMapper {
 			}
 		} else {
 			Double qnt = produtoNaLista.getQuantidade() + listaComprasProduto.getQuantidade();
+			Double preco = listaComprasProduto.getPreco();
 			produtoNaLista.setQuantidade(qnt);
-			return this.updateQuantidadeProduto(listaCompras, produtoNaLista);
+			produtoNaLista.setPreco(preco);
+			produtoNaLista.setDataModificacao(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
+			return this.updateProduto(listaCompras, produtoNaLista);
 		}
 		
 		return false;
 			
 	}
 	
+	@Override
 	public Boolean updateProduto(IListaCompras listaCompras, IListaComprasProduto listaComprasProduto) {
 		ContentValues contentValues = new ContentValues();
 		contentValues.put("lista_compras_id", listaCompras.getId());
@@ -138,15 +146,18 @@ public class ListaComprasMapper implements IListaComprasMapper {
 		contentValues.put("no_carrinho", listaComprasProduto.isNoCarrinho());
 		contentValues.put("data_criacao", listaCompras.getDataCriacao());
 		contentValues.put("data_modificacao", listaCompras.getDataModificacao());
+		contentValues.put("preco", listaComprasProduto.getPreco());
 		
 		int id = (int)this.banco.update(this.nomeTabelaProdutos, contentValues, "lista_compras_id = ? AND produto_id = ?", new String[]{String.valueOf(listaCompras.getId()), String.valueOf(listaComprasProduto.getProduto().getId())});
 		if (id > 0) {
+						
 			return true;
 		}
 		
 		return false;			
 	}
 	
+	@Override
 	public Boolean updateQuantidadeProduto(IListaCompras listaCompras, IListaComprasProduto listaComprasProduto) {
 		String update = "UPDATE " + this.nomeTabelaProdutos + " SET quantidade = " + listaComprasProduto.getQuantidade();
 		
@@ -154,11 +165,12 @@ public class ListaComprasMapper implements IListaComprasMapper {
 		try {
 			this.banco.execSQL(update);
 		} catch (Exception ex) {
-			Log.i("ERRROROROROROR", ex.getMessage());
+			Log.i("ERRO", ex.getMessage());
 		}
 		return true;
 	}
 	
+	@Override
 	public Boolean deleteProduto(IListaCompras listaCompra, int idProduto) {
 		try {
 			return this.banco.delete(this.nomeTabelaProdutos, "lista_compras_id = ? AND produto_id = ?", new String[]{String.valueOf(listaCompra.getId()), String.valueOf(idProduto)}) > 0;
@@ -168,10 +180,11 @@ public class ListaComprasMapper implements IListaComprasMapper {
 		return false;
 	}
 	
+	@Override
 	public IListaComprasProduto findProduto(IListaCompras listaCompra, int idProduto) {
 		IListaComprasProduto lista = null;
 		Cursor cursor = banco.query(this.nomeTabelaProdutos,
-                new String[]{"produto_id", "quantidade", "unidade", "no_carrinho", "data_criacao", "data_modificacao"},
+                new String[]{"produto_id", "quantidade", "unidade", "no_carrinho", "data_criacao", "data_modificacao", "preco"},
                 "lista_compras_id = ? AND produto_id = ?",
                 new String[]{ String.valueOf(listaCompra.getId()), String.valueOf(idProduto)},
                 null,
@@ -184,16 +197,18 @@ public class ListaComprasMapper implements IListaComprasMapper {
 											cursor.getString(cursor.getColumnIndex("unidade")),
 											cursor.getInt(cursor.getColumnIndex("no_carrinho")) == 1 ? true : false,
 											cursor.getString(cursor.getColumnIndex("data_criacao")),
-    										cursor.getString(cursor.getColumnIndex("data_modificacao")));
+    										cursor.getString(cursor.getColumnIndex("data_modificacao")), 
+    										cursor.getDouble(cursor.getColumnIndex("preco")));
 		}
 		return lista;
 		
 	}
 	
+	@Override
 	public ArrayList<IListaComprasProduto> findAllProdutos(IListaCompras listaCompra) {
 		ArrayList<IListaComprasProduto> listas = new ArrayList<IListaComprasProduto>();
 		Cursor cursor = banco.query(this.nomeTabelaProdutos,
-					                new String[]{"produto_id", "quantidade", "unidade", "no_carrinho", "data_criacao", "data_modificacao"},
+					                new String[]{"produto_id", "quantidade", "unidade", "no_carrinho", "data_criacao", "data_modificacao", "preco"},
 					                "lista_compras_id = ?",
 					                new String[]{ String.valueOf(listaCompra.getId())},
 					                null,
@@ -208,7 +223,8 @@ public class ListaComprasMapper implements IListaComprasMapper {
 																	cursor.getString(cursor.getColumnIndex("unidade")),
 																	cursor.getInt(cursor.getColumnIndex("no_carrinho")) == 1 ? true : false,
 																	cursor.getString(cursor.getColumnIndex("data_criacao")),
-																	cursor.getString(cursor.getColumnIndex("data_modificacao")));
+																	cursor.getString(cursor.getColumnIndex("data_modificacao")),
+																	cursor.getDouble(cursor.getColumnIndex("preco")));
 	        	listas.add(lista);
         	} catch (Exception ex) {
         		Log.i("ERRO", ex.getMessage());
