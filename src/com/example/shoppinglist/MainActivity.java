@@ -9,6 +9,8 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -42,6 +44,7 @@ public class MainActivity extends ListActivity implements OnItemClickListener {
 		this.getListView().setAdapter(adapter);
 		this.FillListaCompras();
 		this.getListView().setOnItemClickListener(this);
+		this.getListView().setBackgroundColor(Color.argb(255, 232, 232, 232));
 	}
 	
 	@Override

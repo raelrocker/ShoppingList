@@ -2,6 +2,7 @@ package controllers;
 
 import java.util.ArrayList;
 
+import android.R.integer;
 import mappers.IListaComprasMapper;
 import entities.IListaCompras;
 import entities.IListaComprasProduto;
@@ -63,13 +64,19 @@ public class ListaComprasController {
 		return true;
 	}
 	
-	public double totalDeProdutos(IListaCompras lista) {
-		Double itens = 0.0;
+	public int totalDeProdutos(IListaCompras lista) {
+		int itens = 0;
 		for (IListaComprasProduto item : lista.getProdutos()) {
-			itens += item.getQuantidade();
+			itens += (int)item.getQuantidade();
 		}
 		return itens;
 	}
 	
-	
+	public Double valorTotalDeProdutos(IListaCompras lista) {
+		Double total = 0.0;
+		for (IListaComprasProduto item : lista.getProdutos()) {
+			total += item.getQuantidade() * item.getProduto().getPreco();
+		}
+		return total;
+	}
 }

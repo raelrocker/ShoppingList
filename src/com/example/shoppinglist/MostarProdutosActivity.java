@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -43,6 +44,7 @@ public class MostarProdutosActivity extends ListActivity {
 		adapter = new ProdutoAdapter(this, R.layout.listview_item_row_produtos, arrProdutos);
 		View header = (View)getLayoutInflater().inflate(R.layout.listview_header_row_produtos, null);
 		this.setListAdapter(adapter);
+		this.getListView().setBackgroundColor(Color.argb(255, 232, 232, 232));
 		FillLista();
 		    
 		

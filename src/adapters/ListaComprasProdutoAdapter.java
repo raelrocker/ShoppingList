@@ -40,6 +40,8 @@ public class ListaComprasProdutoAdapter extends ArrayAdapter<IListaComprasProdut
             holder = new ItemHolder();
             holder.lblItemNome = (TextView)row.findViewById(R.id.lblItemNome);
             holder.lblItemQuantidade = (TextView)row.findViewById(R.id.lblItemQuantidade);
+            holder.lblItemValor = (TextView)row.findViewById(R.id.lblItemValor);
+            holder.lblItemTotal = (TextView)row.findViewById(R.id.lblItemTotal);
             
             row.setTag(holder);
         }
@@ -50,7 +52,9 @@ public class ListaComprasProdutoAdapter extends ArrayAdapter<IListaComprasProdut
         
         IListaComprasProduto item = data.get(position);
         holder.lblItemNome.setText(item.getProduto().getNome());
-        holder.lblItemQuantidade.setText("Qnt: " + String.valueOf(item.getQuantidade()));
+        holder.lblItemQuantidade.setText("Qnt: " + String.valueOf((int)item.getQuantidade()));
+        holder.lblItemValor.setText("Vlr R$: " + String.valueOf(item.getProduto().getPreco()));
+        holder.lblItemTotal.setText("Total R$: " + String.valueOf(item.getProduto().getPreco() * item.getQuantidade()));
         
         return row;
     }
@@ -59,5 +63,7 @@ public class ListaComprasProdutoAdapter extends ArrayAdapter<IListaComprasProdut
     {
     	TextView lblItemNome;
         TextView lblItemQuantidade;
+        TextView lblItemValor;
+        TextView lblItemTotal;
     }
 }

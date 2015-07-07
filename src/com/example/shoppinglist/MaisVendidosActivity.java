@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import android.app.ListActivity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +29,7 @@ public class MaisVendidosActivity extends ListActivity {
 		lstProdutosComprados = pc.findMaisComprados();		
 		adapter = new ArrayAdapter<ProdutoComprado>(this, android.R.layout.simple_list_item_1, lstProdutosComprados);
 		this.getListView().setAdapter(adapter);
+		this.getListView().setBackgroundColor(Color.argb(255, 232, 232, 232));
 	}
 
 	@Override

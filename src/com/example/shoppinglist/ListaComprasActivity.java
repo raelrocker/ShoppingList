@@ -1,15 +1,18 @@
 package com.example.shoppinglist;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import adapters.ListaComprasProdutoAdapter;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ClipData.Item;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,6 +49,7 @@ public class ListaComprasActivity extends Activity implements OnItemLongClickLis
 	private ArrayList<IProduto> lsProdutos;
 	private IListaComprasProduto itemSelecionado = null;
 	private TextView lblTotalItens;
+	private TextView lblValorTotal;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +61,9 @@ public class ListaComprasActivity extends Activity implements OnItemLongClickLis
 		listaCompras =  (ListaCompras)listaController.findListaCompras(intent.getIntExtra("ListaComprasId", 0));
 		lsProdutosNaLista = new ArrayList<IListaComprasProduto>();
 		lsListaComprasProdutos = (ListView)findViewById(R.id.lstListaCompras2);
+		lsListaComprasProdutos.setBackgroundColor(Color.argb(255, 232, 232, 232));
 		lblTotalItens = (TextView)findViewById(R.id.lblTotalItens);
+		lblValorTotal = (TextView)findViewById(R.id.lblValorTotal);
 		produtosAdapter = new ListaComprasProdutoAdapter(this, R.layout.listview_item_row_itens ,lsProdutosNaLista);
 		lsListaComprasProdutos.setAdapter(produtosAdapter);
 		atualizarListaProdutos();
@@ -68,6 +74,7 @@ public class ListaComprasActivity extends Activity implements OnItemLongClickLis
 		lsListaComprasProdutos.setOnItemLongClickListener(this);
 		lsListaComprasProdutos.setOnItemClickListener(this);
 		this.setTitle(listaCompras.getNome());
+		this.getWindow().getDecorView().setBackgroundColor(Color.argb(255, 200, 200, 200));
 	}
 
 	
@@ -121,7 +128,7 @@ public class ListaComprasActivity extends Activity implements OnItemLongClickLis
 	    	ls.add(itemSelecionado.getProduto());
 	    	ad = new ArrayAdapter<IProduto>(this, android.R.layout.simple_spinner_dropdown_item, ls);
 		    spinnerProdutos.setAdapter(ad);
-		    txtQuantidade.setText(String.valueOf(itemSelecionado.getQuantidade()));
+		    txtQuantidade.setText(String.valueOf((int)itemSelecionado.getQuantidade()));
 	    } else {
 	    	ad = new ArrayAdapter<IProduto>(this, android.R.layout.simple_spinner_dropdown_item, lsProdutos);
 		    spinnerProdutos.setAdapter(ad);
@@ -177,6 +184,8 @@ public class ListaComprasActivity extends Activity implements OnItemLongClickLis
     	lsProdutosNaLista.addAll(listaController.findAllProdutos(listaCompras));
     	produtosAdapter.notifyDataSetChanged();
     	lblTotalItens.setText(String.valueOf(listaController.totalDeProdutos(listaCompras) + " PRODUTOS"));
+    	
+    	lblValorTotal.setText("TOTAL R$ " + String.valueOf(NumberFormat.getCurrencyInstance(new Locale ("pt", "BR")).format(listaController.valorTotalDeProdutos(listaCompras))));
     }
 
 

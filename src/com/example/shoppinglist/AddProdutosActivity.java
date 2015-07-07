@@ -52,6 +52,7 @@ public class AddProdutosActivity extends Activity implements OnItemClickListener
 		// LISTA DE PRODUTOS
 		pc = DependencyManager.GetProdutoController(this);
 		lstProdutos = (ListView)findViewById(R.id.lstListaProdutos);
+		lstProdutos.setBackgroundColor(Color.argb(255, 232, 232, 232));
 		arrayProdutos = pc.findAllProdutos();
 		adapterProdutos = new ArrayAdapter<IProduto>(this, android.R.layout.simple_list_item_1, arrayProdutos);
 		lstProdutos.setAdapter(adapterProdutos);

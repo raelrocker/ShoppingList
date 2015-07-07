@@ -9,6 +9,7 @@ import entities.IProduto;
 import entities.Produto;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -43,6 +44,7 @@ public class ProdutosActivity extends Activity implements OnClickListener {
 			txtPreco.setText(String.valueOf(produto.getPreco()));
 			this.operacao = 2;
 		}
+		getWindow().getDecorView().setBackgroundColor(Color.argb(255, 232, 232, 232));
 	}
 
 	@Override
