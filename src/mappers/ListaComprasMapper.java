@@ -161,7 +161,6 @@ public class ListaComprasMapper implements IListaComprasMapper {
 	public Boolean updateQuantidadeProduto(IListaCompras listaCompras, IListaComprasProduto listaComprasProduto) {
 		String update = "UPDATE " + this.nomeTabelaProdutos + " SET quantidade = " + listaComprasProduto.getQuantidade();
 		
-		int rowsAffect = 0;
 		try {
 			this.banco.execSQL(update);
 		} catch (Exception ex) {

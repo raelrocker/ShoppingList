@@ -2,9 +2,6 @@ package com.example.shoppinglist;
 
 import java.util.ArrayList;
 
-import controllers.ListaComprasController;
-import controllers.ProdutoController;
-import dependencyManager.DependencyManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -19,6 +16,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import controllers.ListaComprasController;
+import controllers.ProdutoController;
+import dependencyManager.DependencyManager;
 import entities.IListaComprasProduto;
 import entities.IProduto;
 import entities.ListaCompras;
@@ -33,7 +33,6 @@ public class AddProdutosActivity extends Activity implements OnItemClickListener
 	private ListaComprasController lc;
 	private Intent intent;
 	private ListaCompras listaCompras;
-	private ListaComprasController listaController;
 	private ArrayList<IListaComprasProduto> lsItens;
 	
 	

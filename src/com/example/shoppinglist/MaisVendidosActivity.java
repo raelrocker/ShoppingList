@@ -1,8 +1,6 @@
 package com.example.shoppinglist;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Map;
 
 import android.app.ListActivity;
 import android.graphics.Color;
@@ -12,7 +10,6 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import controllers.ProdutoController;
 import dependencyManager.DependencyManager;
-import entities.IProduto;
 import entities.ProdutoComprado;
 
 public class MaisVendidosActivity extends ListActivity {
@@ -34,16 +31,12 @@ public class MaisVendidosActivity extends ListActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.mais_vendidos, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;

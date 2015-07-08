@@ -42,12 +42,9 @@ public class MostarProdutosActivity extends ListActivity {
 		registerForContextMenu(getListView());
 		
 		adapter = new ProdutoAdapter(this, R.layout.listview_item_row_produtos, arrProdutos);
-		View header = (View)getLayoutInflater().inflate(R.layout.listview_header_row_produtos, null);
 		this.setListAdapter(adapter);
 		this.getListView().setBackgroundColor(Color.argb(255, 232, 232, 232));
 		FillLista();
-		    
-		
 	}
 	
 	@Override
@@ -69,7 +66,7 @@ public class MostarProdutosActivity extends ListActivity {
 	    try {
 	        info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 	    } catch (ClassCastException e) {
-	        Log.e("sad", "bad menuInfo", e);
+	        Log.e("Erro", "bad menuInfo", e);
 	    return;
 	    }
 
@@ -90,7 +87,7 @@ public class MostarProdutosActivity extends ListActivity {
 		        info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		        produto = (Produto) getListAdapter().getItem(info.position);
 		    } catch (ClassCastException e) {
-		        Log.e("sad", "bad menuInfo", e);
+		        Log.e("Erro", "bad menuInfo", e);
 		        return false;
 		    }
 		    
@@ -136,16 +133,14 @@ public class MostarProdutosActivity extends ListActivity {
 		
 	public void deleteDialog() {
 	    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-	        //@Override
+	    	
 	        public void onClick(DialogInterface dialog, int which) {
 	            switch (which){
 	            case DialogInterface.BUTTON_POSITIVE:
-	                //Do your Yes progress
 	            	RemoverProduto();
 	                break;
 
 	            case DialogInterface.BUTTON_NEGATIVE:
-	                //Do your No progress
 	            	removerProdutoResultado = 0;
 	                break;
 	            }

@@ -10,7 +10,6 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -70,7 +69,7 @@ public class MainActivity extends ListActivity implements OnItemClickListener {
 	    try {
 	        info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 	    } catch (ClassCastException e) {
-	        Log.e("sad", "bad menuInfo", e);
+	        Log.e("Erro", "bad menuInfo", e);
 	    return;
 	    }
 
@@ -89,19 +88,24 @@ public class MainActivity extends ListActivity implements OnItemClickListener {
 		    AdapterView.AdapterContextMenuInfo info;
 		    IListaCompras  lista = null;
 		    try {
+		    	
 		        info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		        lista = this.adapter.getItem(info.position);
+		        
 		    } catch (ClassCastException e) {
-		        Log.e("sad", "bad menuInfo", e);
+		    	
+		        Log.e("Erro", "bad menuInfo", e);
 		        return false;
+		        
 		    }
 		    
-		    
 		    switch (item.getItemId()) {
+		    
 				case 0:
 					listaSelecionada = lista;
 					novaListaDialog(lista.getNome());
 					break;
+					
 				case 1:
 					listaSelecionada = lista;
 					deleteDialog();
@@ -111,19 +115,24 @@ public class MainActivity extends ListActivity implements OnItemClickListener {
 					break;
 			}
 		} else {
+			
 			Intent i;
 	        switch(item.getItemId()){
+	        
 		        case R.id.menuNovaLista:
 		        	novaListaDialog("");
 		            return true;
+		            
 		        case R.id.menuNovoProduto:
 		        	i = new Intent(this, ProdutosActivity.class);
 		    		startActivityForResult(i, MAIN_ACTIVITY);
 		            return true;
+		            
 		        case R.id.menuVerProdutos:
 		        	i = new Intent(this, MostarProdutosActivity.class);
 		    		startActivityForResult(i, MAIN_ACTIVITY);
 		            return true;
+		            
 		        case R.id.menuMaisComprados:
 		        	i = new Intent(this, MaisVendidosActivity.class);
 		    		startActivity(i);
@@ -158,10 +167,12 @@ public class MainActivity extends ListActivity implements OnItemClickListener {
 	 * @param nome - nome da lista de compras
 	 */
 	public void novaListaDialog(String nome) {
+		
 		LayoutInflater inflater = this.getLayoutInflater();
 	    final View inflator = inflater.inflate(R.layout.nova_lista_de_compras, null);
 	    final EditText txtNomeNovaLista = (EditText)inflator.findViewById(R.id.txtNomeNovaLista);
 	    txtNomeNovaLista.setText(nome);
+	    
 	    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 	        //@Override
 	        public void onClick(DialogInterface dialog, int which) {
@@ -213,14 +224,20 @@ public class MainActivity extends ListActivity implements OnItemClickListener {
 	 * Delete a lista de compras
 	 */
 	public void removerLista() {
-		if (listaSelecionada != null) {
-			ListaComprasController ls = DependencyManager.GetListaComprasController(this);
-			if (ls.deleteListaCompras(listaSelecionada.getId())) {
-				FillListaCompras();
-				Toast.makeText(this, "Lista " + listaSelecionada.getNome() + " deletada", Toast.LENGTH_LONG).show();
-			} else {
-				Toast.makeText(this, "ERRO", Toast.LENGTH_LONG).show();
+		
+		try {
+		
+			if (listaSelecionada != null) {
+				ListaComprasController ls = DependencyManager.GetListaComprasController(this);
+				if (ls.deleteListaCompras(listaSelecionada.getId())) {
+					FillListaCompras();
+					Toast.makeText(this, "Lista " + listaSelecionada.getNome() + " deletada", Toast.LENGTH_LONG).show();
+				} else {
+					Toast.makeText(this, "ERRO", Toast.LENGTH_LONG).show();
+				}
 			}
+		} catch (Exception ex) {
+			Toast.makeText(this, "Erro ao deletar lista de compras", Toast.LENGTH_LONG).show();
 		}
 		listaSelecionada = null;
 	}

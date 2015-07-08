@@ -2,7 +2,6 @@ package controllers;
 
 import java.util.ArrayList;
 
-import android.R.integer;
 import mappers.IListaComprasMapper;
 import entities.IListaCompras;
 import entities.IListaComprasProduto;

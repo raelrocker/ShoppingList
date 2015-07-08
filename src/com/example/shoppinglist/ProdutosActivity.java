@@ -1,12 +1,5 @@
 package com.example.shoppinglist;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import controllers.ProdutoController;
-import dependencyManager.DependencyManager;
-import entities.IProduto;
-import entities.Produto;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,6 +10,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import controllers.ProdutoController;
+import dependencyManager.DependencyManager;
+import entities.IProduto;
+import entities.Produto;
 
 public class ProdutosActivity extends Activity implements OnClickListener {
 
@@ -25,6 +22,7 @@ public class ProdutosActivity extends Activity implements OnClickListener {
 	Button btnSalvar;
 	IProduto produto;
 	int operacao = 1;
+	int operacaoErro = -1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +66,9 @@ public class ProdutosActivity extends Activity implements OnClickListener {
 				setResult(this.operacao);
 				finish();
 			} catch (Exception ex) {
-				Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+				Toast.makeText(this, "Erro salvar produto", Toast.LENGTH_LONG).show();
+				setResult(this.operacaoErro);
+				finish();
 			}
 			
 		}

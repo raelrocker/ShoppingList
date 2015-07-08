@@ -1,7 +1,6 @@
 package mappers;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import entities.IProduto;
 import entities.ProdutoComprado;

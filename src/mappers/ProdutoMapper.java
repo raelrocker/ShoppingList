@@ -1,11 +1,8 @@
 package mappers;
 
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import android.content.ContentValues;
 import android.database.Cursor;

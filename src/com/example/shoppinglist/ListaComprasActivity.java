@@ -1,6 +1,5 @@
 package com.example.shoppinglist;
 
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -94,13 +93,12 @@ public class ListaComprasActivity extends Activity implements OnItemLongClickLis
 		        info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		        produto = this.produtosAdapter.getItem(info.position);
 		    } catch (ClassCastException e) {
-		        Log.e("sad", "bad menuInfo", e);
+		        Log.e("Erro", "bad menuInfo", e);
 		        return false;
 		    }
     		switch (item.getItemId()) {
 				case 0:
 					itemSelecionado = produto;
-					//deleteDialog();
 					break;
 		
 				default:
@@ -126,23 +124,28 @@ public class ListaComprasActivity extends Activity implements OnItemLongClickLis
 	    
 	    ArrayAdapter<IProduto> ad;
 	    if (itemSelecionado != null) {
+	    	
 	    	ArrayList<IProduto> ls = new ArrayList<IProduto>();
 	    	ls.add(itemSelecionado.getProduto());
 	    	ad = new ArrayAdapter<IProduto>(this, android.R.layout.simple_spinner_dropdown_item, ls);
 		    spinnerProdutos.setAdapter(ad);
 		    txtQuantidade.setText(String.valueOf((int)itemSelecionado.getQuantidade()));
 		    txtValor.setText(String.valueOf(itemSelecionado.getPreco()));
+		    
 	    } else {
+	    	
 	    	ad = new ArrayAdapter<IProduto>(this, android.R.layout.simple_spinner_dropdown_item, lsProdutos);
 		    spinnerProdutos.setAdapter(ad);
 		    txtValor.setVisibility(View.INVISIBLE);
 		    lblValor.setVisibility(View.INVISIBLE);
+		    
 	    }
 	    
 	    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 	        //@Override
 	        public void onClick(DialogInterface dialog, int which) {
 	            switch (which){
+	            
 		            case DialogInterface.BUTTON_POSITIVE:
 		            	IProduto produto = (IProduto)spinnerProdutos.getSelectedItem();
 		            	String q = txtQuantidade.getText().toString();
@@ -192,6 +195,7 @@ public class ListaComprasActivity extends Activity implements OnItemLongClickLis
     }
     
     public void atualizarListaProdutos() {
+    	
     	lsProdutosNaLista.clear();
     	lsProdutosNaLista.addAll(listaController.findAllProdutos(listaCompras));
     	produtosAdapter.notifyDataSetChanged();
@@ -231,9 +235,13 @@ public class ListaComprasActivity extends Activity implements OnItemLongClickLis
 	}
     
 	public void removerProduto() {
-		if (listaController.deleteProduto(listaCompras, itemSelecionado.getProduto().getId())) {
-			this.atualizarListaProdutos();
-			itemSelecionado = null;
+		try {
+			if (listaController.deleteProduto(listaCompras, itemSelecionado.getProduto().getId())) {
+				this.atualizarListaProdutos();
+				itemSelecionado = null;
+			}
+		} catch (Exception ex) {
+			Toast.makeText(this, "Erro ao remover produto da lista de compras", Toast.LENGTH_LONG).show();
 		}
 	}
 
