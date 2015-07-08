@@ -28,5 +28,7 @@ public interface IListaComprasMapper {
 	public abstract IListaComprasProduto findProduto(IListaCompras listaCompra, int idProduto);
 	
 	public abstract ArrayList<IListaComprasProduto> findAllProdutos(IListaCompras listaCompra);
+	
+	public Boolean deleteAllProduto(int idListaCompras);
 
 }

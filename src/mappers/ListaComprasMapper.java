@@ -52,7 +52,10 @@ public class ListaComprasMapper implements IListaComprasMapper {
 	
 	@Override
 	public Boolean delete(int id) {
-		return this.banco.delete(this.nomeTabela, "id = ?", new String[]{String.valueOf(id)}) > 0;
+		if (this.banco.delete(this.nomeTabela, "id = ?", new String[]{String.valueOf(id)}) > 0) {
+			return this.deleteAllProduto(id);
+		}
+		 return false;
 	}
 	
 	@Override
@@ -174,7 +177,17 @@ public class ListaComprasMapper implements IListaComprasMapper {
 		try {
 			return this.banco.delete(this.nomeTabelaProdutos, "lista_compras_id = ? AND produto_id = ?", new String[]{String.valueOf(listaCompra.getId()), String.valueOf(idProduto)}) > 0;
 		} catch (Exception ex) {
-			Log.i("EROROROROR", ex.getMessage());
+			Log.i("ERRO", ex.getMessage());
+		}
+		return false;
+	}
+	
+	@Override
+	public Boolean deleteAllProduto(int idListaCompras) {
+		try {
+			return this.banco.delete(this.nomeTabelaProdutos, "lista_compras_id = ? ", new String[]{String.valueOf(idListaCompras)}) > 0;
+		} catch (Exception ex) {
+			Log.i("ERRO", ex.getMessage());
 		}
 		return false;
 	}
