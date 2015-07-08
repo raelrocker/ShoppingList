@@ -49,6 +49,7 @@ public class ListaComprasActivity extends Activity implements OnItemLongClickLis
 	private IListaComprasProduto itemSelecionado = null;
 	private TextView lblTotalItens;
 	private TextView lblValorTotal;
+	private ArrayAdapter<IProduto> spinnerAdapter;;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -122,20 +123,20 @@ public class ListaComprasActivity extends Activity implements OnItemLongClickLis
 	    final EditText txtValor = (EditText)inflator.findViewById(R.id.txtItemNovoValor);
 	    final TextView lblValor = (TextView)inflator.findViewById(R.id.lblItemNovoValor);
 	    
-	    ArrayAdapter<IProduto> ad;
+	    
 	    if (itemSelecionado != null) {
 	    	
 	    	ArrayList<IProduto> ls = new ArrayList<IProduto>();
 	    	ls.add(itemSelecionado.getProduto());
-	    	ad = new ArrayAdapter<IProduto>(this, android.R.layout.simple_spinner_dropdown_item, ls);
-		    spinnerProdutos.setAdapter(ad);
+	    	spinnerAdapter = new ArrayAdapter<IProduto>(this, android.R.layout.simple_spinner_dropdown_item, ls);
+		    spinnerProdutos.setAdapter(spinnerAdapter);
 		    txtQuantidade.setText(String.valueOf((int)itemSelecionado.getQuantidade()));
 		    txtValor.setText(String.valueOf(itemSelecionado.getPreco()));
 		    
 	    } else {
 	    	
-	    	ad = new ArrayAdapter<IProduto>(this, android.R.layout.simple_spinner_dropdown_item, lsProdutos);
-		    spinnerProdutos.setAdapter(ad);
+	    	spinnerAdapter = new ArrayAdapter<IProduto>(this, android.R.layout.simple_spinner_dropdown_item, lsProdutos);
+		    spinnerProdutos.setAdapter(spinnerAdapter);
 		    txtValor.setVisibility(View.INVISIBLE);
 		    lblValor.setVisibility(View.INVISIBLE);
 		    
@@ -149,6 +150,7 @@ public class ListaComprasActivity extends Activity implements OnItemLongClickLis
 		            case DialogInterface.BUTTON_POSITIVE:
 		            	IProduto produto = (IProduto)spinnerProdutos.getSelectedItem();
 		            	String q = txtQuantidade.getText().toString();
+		            	q = q.isEmpty() ? "0" : q;
 		            	String preco = txtValor.getText().toString();
 		            	preco = preco.isEmpty() ? "0.0" : preco; 
 		            	salvarLista(produto, Double.parseDouble(q), Double.parseDouble(preco));
@@ -171,7 +173,9 @@ public class ListaComprasActivity extends Activity implements OnItemLongClickLis
     public void salvarLista(IProduto p, Double qnt, Double preco) {
     	
     	try {
-    	
+    		if (qnt == 0) {
+    			throw new Exception();
+    		}
 	    	SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	    	if (itemSelecionado != null && p.getId() == itemSelecionado.getProduto().getId()) {
 	    		itemSelecionado.setDataModificacao(sdf.format(new Date()));
@@ -202,6 +206,12 @@ public class ListaComprasActivity extends Activity implements OnItemLongClickLis
     	lblTotalItens.setText(String.valueOf(listaController.totalDeProdutos(listaCompras) + " PRODUTOS"));
     	
     	lblValorTotal.setText("TOTAL R$ " + String.valueOf(NumberFormat.getCurrencyInstance(new Locale ("pt", "BR")).format(listaController.valorTotalDeProdutos(listaCompras))));
+    	
+    	if (lsProdutos != null) {
+	    	lsProdutos.clear();
+	    	lsProdutos.addAll(produtoController.findAllProdutos());
+    	}
+    	
     }
 
 	@Override

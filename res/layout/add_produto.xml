@@ -23,7 +23,7 @@
             android:id="@+id/lblItemQuantidade"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Quantidade"
+            android:text="Qnt"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText

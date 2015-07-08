@@ -41,7 +41,7 @@
         </activity>
         <activity
             android:name=".MaisVendidosActivity"
-            android:label="@string/title_activity_mais_vendidos" >
+            android:label="Mais comprados" >
         </activity>
     </application>
 

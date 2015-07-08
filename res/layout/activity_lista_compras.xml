@@ -1,17 +1,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:scrollbars="vertical"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
     tools:context="${relativePackage}.${activityClass}">
-
+    
     <ListView
         android:id="@+id/lstListaCompras2"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="318dp" >
+        android:layout_height="300dp"
+        android:fastScrollEnabled="true"
+        android:fastScrollAlwaysVisible="true">
     </ListView>
-
+    
     <TextView
         android:id="@+id/lblTotalItens"
         android:layout_width="fill_parent"
